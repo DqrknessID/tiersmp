@@ -1,5 +1,7 @@
 # TierSMP
 
+![TierSMP Diagram](diagram.png)
+
 TierSMP is a Minecraft Paper plugin that creates a competitive tier-based PvP environment. The plugin categorizes players into five distinct tiers based on their PvP kills and score.
 
 ## Score and tier thresholds
