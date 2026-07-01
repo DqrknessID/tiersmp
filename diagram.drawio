@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="drawio" version="26.0.0">
+  <diagram name="Page-1">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- ==================== FLOW 1: MAIN FLOW (PlayerDeathEvent) ==================== -->
+        <mxCell id="swim1" value="1. PvP Death &amp; Score Flow" style="swimlane;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="1080" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="n1" value="PlayerDeathEvent" style="rhombus;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="swim1">
+          <mxGeometry x="20" y="50" width="120" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="n2" value="Calculate Score Delta&#xa;(Based on Tier Diff)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="swim1">
+          <mxGeometry x="180" y="55" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="n3" value="Recalculate Tier&#xa;Natural Check" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="swim1">
+          <mxGeometry x="360" y="55" width="130" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="n4" value="Target Tier&#xa;but Cap Full?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="swim1">
+          <mxGeometry x="530" y="45" width="130" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="n5" value="Promote to Target" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="swim1">
+          <mxGeometry x="700" y="40" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="n6" value="Hold at Current" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="swim1">
+          <mxGeometry x="700" y="95" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="n7" value="Apply Tier Benefits&#xa;(Health, Speed, etc)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="swim1">
+          <mxGeometry x="840" y="55" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="n8" value="Visual &amp; Nametag&#xa;Update" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="swim1">
+          <mxGeometry x="990" y="55" width="80" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Edges for Flow 1 -->
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" edge="1" parent="swim1" source="n1" target="n2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" edge="1" parent="swim1" source="n2" target="n3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" edge="1" parent="swim1" source="n3" target="n4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" value="No" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0.5;exitY=0;entryX=0;entryY=0.5;" edge="1" parent="swim1" source="n4" target="n5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" value="Yes" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;" edge="1" parent="swim1" source="n4" target="n6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.25;" edge="1" parent="swim1" source="n5" target="n7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.75;" edge="1" parent="swim1" source="n6" target="n7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" edge="1" parent="swim1" source="n7" target="n8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== FLOW 2: S-CAP PROMOTION FLOW ==================== -->
+        <mxCell id="swim2" value="2. Cascading Promotion Flow (Vacancy Filling)" style="swimlane;startSize=30;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="40" y="210" width="1080" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="n10" value="Player drops out&#xa;of tier T" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="swim2">
+          <mxGeometry x="20" y="45" width="150" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="n11" value="Demote Player&#xa;(Vacancy in T created)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="swim2">
+          <mxGeometry x="210" y="45" width="130" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="n12" value="Find all candidates in T-1&#xa;(score &gt;= T threshold)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="swim2">
+          <mxGeometry x="380" y="45" width="140" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="n13" value="Any candidates&#xa;exist?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="swim2">
+          <mxGeometry x="560" y="35" width="120" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="n14" value="Sort candidates&#xa;by score desc" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="swim2">
+          <mxGeometry x="720" y="45" width="130" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="n15" value="Promote top candidate to T&#xa;(recurse on T-1 vacancy)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="swim2">
+          <mxGeometry x="890" y="45" width="150" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Edges for Flow 2 -->
+        <mxCell id="e10" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" edge="1" parent="swim2" source="n10" target="n11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e11" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" edge="1" parent="swim2" source="n11" target="n12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e12" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" edge="1" parent="swim2" source="n12" target="n13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e13" value="Yes" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" edge="1" parent="swim2" source="n13" target="n14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e14" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" edge="1" parent="swim2" source="n14" target="n15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e15" value="No" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=1;exitDx=0;exitDy=0;" edge="1" parent="swim2" source="n13" target="n12">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="620" y="115" />
+              <mxPoint x="450" y="115" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ==================== FLOW 3: /EINV LIFECYCLE ==================== -->
+        <mxCell id="swim3" value="3. Extra Inventory (/einv) Lifecycle" style="swimlane;startSize=30;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="40" y="360" width="1080" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="n20" value="Run /einv command" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="swim3">
+          <mxGeometry x="20" y="55" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="n21" value="Tier A or S?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="swim3">
+          <mxGeometry x="170" y="40" width="110" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="n22" value="Create GUI (9 / 18 slots)&#xa;Populate and Open" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="swim3">
+          <mxGeometry x="320" y="55" width="150" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="n23" value="Player interacts&#xa;and closes GUI" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="swim3">
+          <mxGeometry x="510" y="55" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="n24" value="Save items to&#xa;PlayerData in memory" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="swim3">
+          <mxGeometry x="670" y="55" width="140" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="n25" value="Player dies /&#xa;combat logs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="swim3">
+          <mxGeometry x="840" y="55" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="n26" value="Drop contents as item&#xa;entities &amp; clear data" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="swim3">
+          <mxGeometry x="960" y="55" width="110" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Edges for Flow 3 -->
+        <mxCell id="e20" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" edge="1" parent="swim3" source="n20" target="n21">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e21" value="Yes" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" edge="1" parent="swim3" source="n21" target="n22">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e22" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" edge="1" parent="swim3" source="n22" target="n23">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e23" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" edge="1" parent="swim3" source="n23" target="n24">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e24" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" edge="1" parent="swim3" source="n24" target="n25">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e25" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" edge="1" parent="swim3" source="n25" target="n26">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e26" value="No" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=1;" edge="1" parent="swim3" source="n21" target="n20">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="225" y="130" />
+              <mxPoint x="80" y="130" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ==================== FLOW 4: SCORE DECAY CYCLE ==================== -->
+        <mxCell id="swim4" value="4. Score Decay Cycle (24h)" style="swimlane;startSize=30;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="40" y="530" width="1080" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="n30" value="Decay Task (Async repeating)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="swim4">
+          <mxGeometry x="20" y="40" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="n31" value="Loop player list&#xa;Reduce score by 2%" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="swim4">
+          <mxGeometry x="220" y="40" width="150" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="n32" value="Sync Recalculate Tiers&#xa;for changed players" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="swim4">
+          <mxGeometry x="420" y="40" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="n33" value="Async Save Data&#xa;to players.yml" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="swim4">
+          <mxGeometry x="630" y="40" width="150" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Edges for Flow 4 -->
+        <mxCell id="e30" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" edge="1" parent="swim4" source="n30" target="n31">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e31" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" edge="1" parent="swim4" source="n31" target="n32">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e32" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" edge="1" parent="swim4" source="n32" target="n33">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== FLOW 5: COMBAT LOG SYSTEM ==================== -->
+        <mxCell id="swim5" value="5. Combat Tag &amp; Log Out System" style="swimlane;startSize=30;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="40" y="660" width="1080" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="n40" value="EntityDamageByEntityEvent&#xa;(Player hit player)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="swim5">
+          <mxGeometry x="20" y="45" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="n41" value="Apply Combat Tag&#xa;(expiry +15 seconds)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="swim5">
+          <mxGeometry x="210" y="45" width="140" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="n42" value="PlayerQuitEvent /&#xa;Switches to Disabled World" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="swim5">
+          <mxGeometry x="380" y="45" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="n43" value="Is combat tagged?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="swim5">
+          <mxGeometry x="570" y="35" width="120" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="n44" value="Deduct score (as if died)&#xa;Drop einv &amp; Clear streak" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="swim5">
+          <mxGeometry x="720" y="45" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="n45" value="Broadcast combat log&#xa;and Save Data" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="swim5">
+          <mxGeometry x="910" y="45" width="140" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Edges for Flow 5 -->
+        <mxCell id="e40" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" edge="1" parent="swim5" source="n40" target="n41">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e41" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" edge="1" parent="swim5" source="n41" target="n42">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e42" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" edge="1" parent="swim5" source="n42" target="n43">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e43" value="Yes" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" edge="1" parent="swim5" source="n43" target="n44">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e44" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" edge="1" parent="swim5" source="n44" target="n45">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

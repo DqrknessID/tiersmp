@@ -1,0 +1,74 @@
+# TierSMP Configuration File
+
+# Tier score thresholds
+tier-thresholds:
+  # Minimum score required for C tier (Default: 50)
+  c-min: 50
+  # Minimum score required for B tier (Default: 150)
+  b-min: 150
+  # Minimum score required for A tier (Default: 300)
+  a-min: 300
+  # Minimum score required for S tier (Default: 500)
+  s-min: 500
+
+# Tier capacity limits (maximum players allowed in each tier at once)
+tier-caps:
+  # Maximum S tier players (Default: 3)
+  s: 3
+  # Maximum A tier players (Default: 7)
+  a: 7
+  # Maximum B tier players (Default: 10)
+  b: 10
+  # Maximum C tier players (Default: 10)
+  c: 10
+
+# Score gains for killing another player
+score-gains:
+  # Score gained when killing a player of a higher tier (Default: 15)
+  kill-higher: 15
+  # Score gained when killing a player of the same tier (Default: 30)
+  kill-same: 30
+  # Score gained when killing a player of a lower tier (Default: 60)
+  kill-lower: 60
+
+# Score losses when dying to another player
+score-losses:
+  # Score lost when dying to a player of a higher tier (Default: 9)
+  death-by-higher: 9
+  # Score lost when dying to a player of the same tier (Default: 15)
+  death-by-same: 15
+  # Score lost when dying to a player of a lower tier (Default: 30)
+  death-by-lower: 30
+
+# Percentage of score to decay (Default: 2)
+decay-percent: 2
+
+# Interval for score decay in hours (Default: 24)
+decay-interval-hours: 24
+
+# Interval to save cached player data to players.yml in minutes (Default: 5)
+save-interval-minutes: 5
+
+# Cooldown between kills between player pairs in minutes (Default: 5)
+kill-cooldown-minutes: 5
+
+# Combat tag duration in seconds when hit or hitting another player (Default: 15)
+combat-tag-seconds: 15
+
+# List of world names where the plugin score and tier benefits are disabled
+disabled-worlds: []
+
+# Interval to update the S-tier streak sidebar scoreboard in seconds (Default: 10)
+streak-scoreboard-update-seconds: 10
+
+# Interval to reapply permanent speed effects to S-tier players in seconds (Default: 30)
+speed-reapply-seconds: 30
+
+# Maximum score an S-tier player can reach (Default: 505)
+s-score-cap: 505
+
+# Cooldown in seconds before a demoted S-tier player can be promoted to S again (Default: 60)
+s-demotion-cooldown-seconds: 60
+
+# Whether players can transfer their own score to other players using /tierscore give (Default: true)
+score-transaction-enabled: true

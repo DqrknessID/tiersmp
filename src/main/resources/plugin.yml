@@ -1,0 +1,35 @@
+name: TierSMP
+version: '${version}'
+main: org.dqrknessid.tierSMP.TierSMP
+api-version: '1.21'
+author: dqrknessid
+description: Free and open-source survival PvP Tier SMP plugin.
+
+commands:
+  tier:
+    description: View your tier, score, and rank.
+    usage: /tier [player]
+  tiertop:
+    description: View the top 10 players on the server.
+    usage: /tiertop
+  einv:
+    description: Open your extra inventory.
+    aliases: [extrainv, extrainventory]
+    usage: /einv
+  tieradmin:
+    description: Admin commands for managing tiers.
+    permission: tiersmp.admin
+    usage: /tieradmin <set|reset|resetall|reload|setscore|givescore>
+  tierscore:
+    description: Transfer your own score to another player.
+    usage: /tierscore give <player> <amount>
+  einvsee:
+    description: Inspect and modify another player's extra inventory.
+    permission: tiersmp.admin
+    aliases: [extrainventorysee]
+    usage: /einvsee <player>
+
+permissions:
+  tiersmp.admin:
+    description: Allows use of TierSMP administrative commands.
+    default: op

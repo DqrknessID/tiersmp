@@ -1,0 +1,57 @@
+# TierSMP Messages File
+# Supports Minecraft color codes (e.g. &a, &c, &6)
+
+# Broadcast when a player is promoted
+tier-promotion: "&6[TierSMP] &e{player} &ahas risen to {tier} tier!"
+
+# Broadcast when a player is demoted
+tier-demotion: "&6[TierSMP] &e{player} &chas fallen to {tier} tier."
+
+# Message sent when a player tries to open extra inventory but doesn't have access
+no-einv-access: "&c[TierSMP] You do not have access to an extra inventory at your current tier."
+
+# Leaderboard (/tiertop) format keys
+tiertop-header: "&6=== TierSMP Leaderboard ==="
+tiertop-entry: "&e{rank}. {player} &7- Score: &f{score} &7(Tier: &e{tier}&7)"
+tiertop-footer: "&6=========================="
+
+# Format for /tier info command
+tier-info-format: "&6[TierSMP] &e{player} &7| Tier: {tier} | Score: {score} | Streak: {streak} | Rank: #{rank}"
+
+# Admin command feedback messages
+admin-set-success: "&a[TierSMP] Successfully set {player}'s tier to {tier} (score adjusted to {score})."
+admin-reset-success: "&a[TierSMP] Successfully reset data for {player}."
+admin-resetall-confirm: "&c[TierSMP] WARNING: Please run this command again within 10 seconds to confirm resetting ALL player data."
+admin-resetall-done: "&a[TierSMP] All player data has been reset!"
+admin-reload-done: "&a[TierSMP] Config and messages reloaded successfully."
+
+# Admin view messages
+no-einv-to-view: "&c[TierSMP] {player} has no extra inventory."
+
+# Broadcast when a player combat logs
+combat-log-broadcast: "&c[TierSMP] {player} combat logged!"
+
+# Message sent to killer if kill cooldown is active
+kill-cooldown-message: "&c[TierSMP] Kill not counted — cooldown active."
+
+# Message sent when trying to perform score actions in a disabled world
+disabled-world-message: "&c[TierSMP] This world has TierSMP features disabled."
+
+# Admin setscore/givescore commands feedback
+admin-setscore-success: "&a[TierSMP] Set {player}'s score to {amount}."
+admin-givescore-success: "&a[TierSMP] Given {amount} score to {player}. New score: {newScore}."
+
+# Score transaction command (/tierscore give) messages
+transaction-disabled: "&c[TierSMP] Score transactions are currently disabled."
+transaction-self: "&cYou cannot give score to yourself."
+transaction-insufficient: "&cYou don't have enough score."
+transaction-disabled-world: "&cScore transactions are disabled in this world."
+transaction-combat-tagged: "&cYou cannot transfer score while in combat."
+transaction-success-sender: "&a[TierSMP] You gave {amount} score to {player}. Your score: {newScore}."
+transaction-success-receiver: "&a[TierSMP] You received {amount} score from {player}. Your score: {newScore}."
+
+# Promotion/Demotion Titles & Subtitles
+title-promotion: "&6Tier Up!"
+subtitle-promotion: "&aYou are now {tier} tier!"
+title-demotion: "&cTier Down"
+subtitle-demotion: "&7You have fallen to {tier} tier."
