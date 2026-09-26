@@ -33,9 +33,9 @@ Premium includes:
 4. Configure plugins/TierSMP/config.yml to your liking
 
 ## Compatibility
-- Paper 1.21.4+
-- Java 21+
-- Optional: PlaceholderAPI
+- Paper / Purpur 1.21.4 up to 26.2+
+- Java 21 (for 1.21.x) / Java 25 (for 26.x+)
+- Optional: PlaceholderAPI (2.11.x - 2.12.x+)
 
 ## Commands
 | Command | Description | Permission |
