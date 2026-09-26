@@ -20,6 +20,9 @@ logs/
 cache/
 *.jar
 !gradle/wrapper/gradle-wrapper.jar
+jdk25_root/
+jdk-25/
+jdk25.zip
 
 # OS
 .DS_Store
