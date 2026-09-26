@@ -14,6 +14,78 @@ A lightweight Minecraft Paper plugin (1.21.4+) that adds a competitive tier syst
 - Per-world enable/disable
 - Full config and messages customization
 
+## System Flow & Architecture
+
+### 1. Tier Progression Ladder
+```mermaid
+graph TD
+    classDef unranked fill:#7f8c8d,stroke:#34495e,stroke-width:2px,color:#fff;
+    classDef cTier fill:#95a5a6,stroke:#7f8c8d,stroke-width:2px,color:#fff;
+    classDef bTier fill:#3498db,stroke:#2980b9,stroke-width:2px,color:#fff;
+    classDef aTier fill:#9b59b6,stroke:#8e44ad,stroke-width:2px,color:#fff;
+    classDef sTier fill:#e74c3c,stroke:#c0392b,stroke-width:2px,color:#fff;
+
+    U["<b>UNRANKED</b><br/>Score: 0 - 99<br/>Default Baseline"]:::unranked
+    C["<b>C TIER</b><br/>Score: 100 - 299<br/>+1 Heart (22 HP) | 1.1x XP"]:::cTier
+    B["<b>B TIER</b><br/>Score: 300 - 599<br/>+2 Hearts (24 HP) | 1.25x XP | Speed I"]:::bTier
+    A["<b>A TIER</b><br/>Score: 600 - 999<br/>+4 Hearts (28 HP) | 1.5x XP | /einv (1 Row)"]:::aTier
+    S["<b>S TIER</b> (Cap: Top Players)<br/>Score: 1000+<br/>+6 Hearts (32 HP) | 2.0x XP | /einv (2 Rows)<br/>Killstreak Effects & Title Broadcasts"]:::sTier
+
+    U -->|"PvP Kills (+Score)"| C
+    C -->|"Reach 300 Score"| B
+    B -->|"Reach 600 Score"| A
+    A -->|"Reach 1000 Score & Slot Available"| S
+
+    S -.->|"Score Loss / Demotion"| A
+    A -.->|"Score Decay / Deaths"| B
+    B -.->|"Deaths / Penalties"| C
+    C -.->|"Reset / Decay"| U
+```
+
+### 2. PvP Scoring & Anti-Abuse Lifecycle
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Killer as Killer Player
+    participant Engine as TierSMP Engine
+    participant AntiAbuse as Anti-Abuse Guard
+    actor Victim as Victim Player
+    participant Server as Server Broadcast & DB
+
+    Killer->>Victim: PvP Kill Event
+    Engine->>AntiAbuse: Check Same-Target Cooldown & World Whitelist
+    alt Cooldown Active or Same IP/Farming
+        AntiAbuse-->>Killer: Reject Score (Anti-Abuse Logged)
+    else Legitimate Kill
+        AntiAbuse-->>Engine: Approved
+        Engine->>Killer: Add Score (Calculated by Tier Difference)
+        Engine->>Victim: Deduct Score & Check Demotion
+        alt Tier Changed
+            Engine->>Server: Update Tablist, Nametag, & Play Global Sound
+            Server-->>Killer: Broadcast Promotion Announcement
+        end
+        Engine->>Server: Persist Player Data (Async SQLite / YAML)
+    end
+```
+
+### 3. Combat Log & Penalty System
+```mermaid
+stateDiagram-v2
+    [*] --> Peaceful: Normal State
+    Peaceful --> InCombat: Takes/Deals PvP Damage
+    
+    state InCombat {
+        [*] --> TimerActive: 15s Combat Timer
+        TimerActive --> TimerActive: Damage refreshed
+    }
+
+    InCombat --> Peaceful: Timer Expires (Safe)
+    InCombat --> CombatLogged: Disconnects / Quits during Combat
+    
+    CombatLogged --> Penalized: Kill Player + Drop Inventory + Deduct Tier Score
+    Penalized --> [*]: Announce Combat Log to Server
+```
+
 ## Premium Version
 Premium version available on BuiltByBit (link coming soon).
 
