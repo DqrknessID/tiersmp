@@ -53,6 +53,13 @@ public class ExtraInventoryManager {
     }
 
     public void openExtraInventory(Player player) {
+        if (plugin.isTournamentMode()) {
+            player.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(
+                    "&c[TierSMP] Extra inventory is temporarily disabled during Tournament / Event mode!"
+            ));
+            return;
+        }
+
         PlayerData data = plugin.getDataManager().getOrCreate(player.getUniqueId());
         Tier tier = data.getTier();
         if (tier != Tier.A && tier != Tier.S) {
@@ -105,23 +112,34 @@ public class ExtraInventoryManager {
     }
 
     public void dropExtraInventory(UUID uuid, Location location) {
-        PlayerData data = plugin.getDataManager().getOrCreate(uuid);
-        List<ItemStack> contents = data.getEinvContents();
-        if (contents == null || contents.isEmpty()) return;
+        dropExtraInventory(uuid, location, null);
+    }
 
-        for (ItemStack item : contents) {
-            if (item != null && item.getType().isItem() && !item.getType().isAir()) {
-                location.getWorld().dropItemNaturally(location, item);
-            }
-        }
-        data.setEinvContents(new ArrayList<>());
-        
+    public void dropExtraInventory(UUID uuid, Location location, List<ItemStack> dropsList) {
+        // If player has the einv GUI open, save from top inventory first
         Player player = Bukkit.getPlayer(uuid);
         if (player != null && player.getOpenInventory().getTopInventory().getHolder() instanceof EinvHolder) {
             EinvHolder holder = (EinvHolder) player.getOpenInventory().getTopInventory().getHolder();
             if (holder.getOwnerUuid().equals(uuid)) {
+                saveExtraInventory(uuid, player.getOpenInventory().getTopInventory());
                 player.closeInventory();
             }
+        }
+
+        PlayerData data = plugin.getDataManager().getOrCreate(uuid);
+        List<ItemStack> contents = data.getEinvContents();
+        if (contents != null && !contents.isEmpty()) {
+            for (ItemStack item : contents) {
+                if (item != null && !item.getType().isAir()) {
+                    if (dropsList != null) {
+                        dropsList.add(item.clone());
+                    } else if (location != null && location.getWorld() != null) {
+                        location.getWorld().dropItemNaturally(location, item.clone());
+                    }
+                }
+            }
+            data.setEinvContents(new ArrayList<>());
+            plugin.getDataManager().saveAll();
         }
     }
 

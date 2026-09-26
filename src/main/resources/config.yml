@@ -22,16 +22,39 @@ tier-caps:
   # Maximum C tier players (Default: 10)
   c: 10
 
-# Score gains for killing another player
+# Dynamic tier scaling (math-based scaling based on tier differences between killer and victim)
+# When true, score gain and loss dynamically scale by how many tier steps separate the two players.
+# (e.g. S losing to A loses only 20 pts, but S losing to UNRANKED loses 35 pts).
+dynamic-tier-scaling: true
+
+score-scaling:
+  # Base score gained when killing a player of the SAME tier (Default: 30)
+  base-gain: 30
+  # Base score lost when dying to a player of the SAME tier (Default: 15)
+  base-loss: 15
+  # Extra score gained per tier gap when killing a HIGHER tier player (Default: 10)
+  gain-bonus-per-tier: 10
+  # Score gain reduction per tier gap when killing a LOWER tier player (Default: 5)
+  gain-reduction-per-tier: 5
+  # Extra score lost per tier gap when dying to a LOWER tier player (Default: 5)
+  loss-bonus-per-tier: 5
+  # Score loss reduction per tier gap when dying to a HIGHER tier player (Default: 3)
+  loss-reduction-per-tier: 3
+  # Minimum score gained from any kill (Default: 5)
+  min-gain: 5
+  # Minimum score lost from any death (Default: 3)
+  min-loss: 3
+
+# Flat score gains (used only if dynamic-tier-scaling is false)
 score-gains:
-  # Score gained when killing a player of a higher tier (Default: 15)
-  kill-higher: 15
+  # Score gained when killing a player of a higher tier (Default: 60)
+  kill-higher: 60
   # Score gained when killing a player of the same tier (Default: 30)
   kill-same: 30
-  # Score gained when killing a player of a lower tier (Default: 60)
-  kill-lower: 60
+  # Score gained when killing a player of a lower tier (Default: 15)
+  kill-lower: 15
 
-# Score losses when dying to another player
+# Flat score losses (used only if dynamic-tier-scaling is false)
 score-losses:
   # Score lost when dying to a player of a higher tier (Default: 9)
   death-by-higher: 9
@@ -64,11 +87,35 @@ streak-scoreboard-update-seconds: 10
 # Interval to reapply permanent speed effects to S-tier players in seconds (Default: 30)
 speed-reapply-seconds: 30
 
-# Maximum score an S-tier player can reach (Default: 505)
-s-score-cap: 505
+# Maximum score an S-tier player can reach (Default: 550)
+# Setting this higher than s-min (500) gives S-tier players a buffer so they don't immediately demote on a single death.
+s-score-cap: 550
 
 # Cooldown in seconds before a demoted S-tier player can be promoted to S again (Default: 60)
 s-demotion-cooldown-seconds: 60
 
 # Whether players can transfer their own score to other players using /tierscore give (Default: true)
 score-transaction-enabled: true
+
+# XP Multipliers per tier (1.0 = normal vanilla XP, 1.5 = +50% XP, 2.0 = 2x XP / double)
+xp-multipliers:
+  s: 2.0   # S-Tier gets double XP (2.0x / +100%)
+  a: 1.5   # A-Tier gets +50% XP (1.5x)
+  b: 1.25  # B-Tier gets +25% XP (1.25x)
+  c: 1.0   # C-Tier normal XP (1.0x)
+  unranked: 1.0
+
+# Potion duration multipliers per tier (1.0 = normal duration, 1.5 = +50% duration, 2.0 = 2x duration)
+potion-duration-multipliers:
+  s: 2.0   # S-Tier gets double potion duration (2.0x / +100%)
+  a: 1.5   # A-Tier gets +50% potion duration (1.5x)
+  b: 1.25  # B-Tier gets +25% potion duration (1.25x)
+  c: 1.0
+  unranked: 1.0
+
+# Whether to use Bukkit Scoreboard Teams for overhead nametag prefixes [S], [A], etc.
+# If you use vanilla /team or minigame teams and don't want TierSMP to touch scoreboard teams, set this to false.
+use-scoreboard-teams: true
+
+# Whether to format the player's name in the Tab list with their tier prefix (e.g. "[S] PlayerName")
+tablist-prefix: true

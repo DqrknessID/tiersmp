@@ -61,6 +61,7 @@ public class VisualManager {
     }
 
     public void setupTeams() {
+        if (!plugin.getConfig().getBoolean("use-scoreboard-teams", true)) return;
         Scoreboard sb = Bukkit.getScoreboardManager().getMainScoreboard();
         setupTeam(sb, "tsmp_s", "&6[S] ", org.bukkit.scoreboard.Team.OptionStatus.ALWAYS);
         setupTeam(sb, "tsmp_a", "&b[A] ", org.bukkit.scoreboard.Team.OptionStatus.ALWAYS);
@@ -80,12 +81,19 @@ public class VisualManager {
 
     public void updateNametag(Player player) {
         UUID uuid = player.getUniqueId();
-        if (plugin.getConfig().getStringList("disabled-worlds").contains(player.getWorld().getName())) {
+        Tier tier = plugin.getDataManager().getOrCreate(uuid).getTier();
+
+        // Update tablist prefix if enabled
+        if (plugin.getConfig().getBoolean("tablist-prefix", true)) {
+            String prefix = getTierPrefix(tier);
+            player.playerListName(LegacyComponentSerializer.legacyAmpersand().deserialize(prefix + player.getName()));
+        }
+
+        if (plugin.getConfig().getStringList("disabled-worlds").contains(player.getWorld().getName()) || !plugin.getConfig().getBoolean("use-scoreboard-teams", true)) {
             removeFromAllTeams(player.getName());
             return;
         }
 
-        Tier tier = plugin.getDataManager().getOrCreate(uuid).getTier();
         Scoreboard sb = Bukkit.getScoreboardManager().getMainScoreboard();
         removeFromAllTeams(player.getName());
 
@@ -93,6 +101,17 @@ public class VisualManager {
         Team team = sb.getTeam(teamName);
         if (team != null) {
             team.addEntry(player.getName());
+        }
+    }
+
+    private String getTierPrefix(Tier tier) {
+        switch (tier) {
+            case S: return "&6[S] ";
+            case A: return "&b[A] ";
+            case B: return "&a[B] ";
+            case C: return "&8[C] ";
+            case UNRANKED:
+            default: return "&7";
         }
     }
 

@@ -31,7 +31,7 @@ public class BenefitManager {
     }
 
     public void applyBenefits(Player player, Tier tier) {
-        if (isDisabledWorld(player.getWorld().getName())) {
+        if (plugin.isTournamentMode() || isDisabledWorld(player.getWorld().getName())) {
             removeBenefits(player);
             return;
         }

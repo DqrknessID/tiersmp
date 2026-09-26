@@ -27,6 +27,7 @@ public class PlayerListener implements Listener {
         plugin.getDataManager().getOrCreate(player.getUniqueId());
         plugin.getVisualManager().updateNametag(player);
         plugin.getBenefitManager().applyBenefits(player);
+        plugin.getStreakScoreboard().update();
     }
 
     @EventHandler(priority = EventPriority.HIGH)

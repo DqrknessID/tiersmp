@@ -24,7 +24,7 @@ public class PotionListener implements Listener {
     public void onPotionEffect(EntityPotionEffectEvent event) {
         if (!(event.getEntity() instanceof Player)) return;
         Player player = (Player) event.getEntity();
-        if (isDisabled(player)) return;
+        if (plugin.isTournamentMode() || isDisabled(player)) return;
 
         if (event.getCause() == EntityPotionEffectEvent.Cause.PLUGIN) return;
 
@@ -36,13 +36,7 @@ public class PotionListener implements Listener {
             if (newEffect.getDuration() == PotionEffect.INFINITE_DURATION || newEffect.getDuration() < 0) return;
 
             Tier tier = plugin.getDataManager().getOrCreate(player.getUniqueId()).getTier();
-            double multiplier = 1.0;
-
-            if (tier == Tier.S) {
-                multiplier = 1.3;
-            } else if (tier == Tier.A) {
-                multiplier = 1.2;
-            }
+            double multiplier = plugin.getConfig().getDouble("potion-duration-multipliers." + tier.name().toLowerCase(), getDefaultMultiplier(tier));
 
             if (multiplier > 1.0) {
                 int duration = (int) Math.round(newEffect.getDuration() * multiplier);
@@ -57,7 +51,17 @@ public class PotionListener implements Listener {
 
                 event.setCancelled(true);
                 player.addPotionEffect(modifiedEffect);
+                plugin.debug("🧪 Potion Duration Boost: §e" + player.getName() + " §7(" + tier + ") got " + newEffect.getType().getKey().getKey() + " for §b" + (duration / 20) + "s §7(Original: " + (newEffect.getDuration() / 20) + "s, " + multiplier + "x)");
             }
+        }
+    }
+
+    private double getDefaultMultiplier(Tier tier) {
+        switch (tier) {
+            case S: return 2.0;
+            case A: return 1.5;
+            case B: return 1.25;
+            default: return 1.0;
         }
     }
 }

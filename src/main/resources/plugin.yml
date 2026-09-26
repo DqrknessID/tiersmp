@@ -19,7 +19,7 @@ commands:
   tieradmin:
     description: Admin commands for managing tiers.
     permission: tiersmp.admin
-    usage: /tieradmin <set|reset|resetall|reload|setscore|givescore>
+    usage: /tieradmin <set|setscore|givescore|listtier|checklimit|clearcooldown|clearkillcooldown|togglekillcooldown|debug|tournament|recalculate|reset|resetall|reload>
   tierscore:
     description: Transfer your own score to another player.
     usage: /tierscore give <player> <amount>
@@ -28,6 +28,10 @@ commands:
     permission: tiersmp.admin
     aliases: [extrainventorysee]
     usage: /einvsee <player>
+  tiersmp:
+    description: TierSMP main and debug commands.
+    aliases: [tsmp]
+    usage: /tiersmp <debug|tournament|info|reload>
 
 permissions:
   tiersmp.admin:

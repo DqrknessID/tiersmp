@@ -1,9 +1,9 @@
 package org.dqrknessid.tierSMP.visual;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Criteria;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -25,32 +25,16 @@ public class StreakScoreboard {
     }
 
     public void update() {
-        // Skip scoreboard update if no S tier players exist
-        boolean hasSTier = false;
-        for (PlayerData d : plugin.getDataManager().getAllData()) {
-            if (d.getTier() == Tier.S) {
-                hasSTier = true;
-                break;
-            }
-        }
-
         Scoreboard sb = Bukkit.getScoreboardManager().getMainScoreboard();
-        Objective obj = sb.getObjective("tsmp_streak");
-
-        if (!hasSTier) {
-            if (obj != null) {
-                obj.unregister();
-                activeEntries.clear();
-            }
-            return;
-        }
 
         List<PlayerData> sPlayers = new ArrayList<>();
         for (PlayerData d : plugin.getDataManager().getAllData()) {
-            if (d.getTier() == Tier.S && d.getKillStreak() > 0) {
+            if (d.getTier() == Tier.S) {
                 sPlayers.add(d);
             }
         }
+
+        Objective obj = sb.getObjective("tsmp_streak");
 
         if (sPlayers.isEmpty()) {
             if (obj != null) {
@@ -60,11 +44,16 @@ public class StreakScoreboard {
             return;
         }
 
-        sPlayers.sort(Comparator.comparingInt(PlayerData::getKillStreak).reversed());
+        sPlayers.sort(Comparator.comparingInt(PlayerData::getKillStreak).reversed()
+                .thenComparing(Comparator.comparingInt(PlayerData::getScore).reversed()));
 
         if (obj == null) {
-            obj = sb.registerNewObjective("tsmp_streak", Criteria.DUMMY, Component.text("S-Tier Streaks", NamedTextColor.GOLD));
+            obj = sb.registerNewObjective("tsmp_streak", Criteria.DUMMY, LegacyComponentSerializer.legacyAmpersand().deserialize("&6&l★ S-Tier Streaks ★"));
             obj.setDisplaySlot(DisplaySlot.SIDEBAR);
+        } else {
+            if (obj.getDisplaySlot() != DisplaySlot.SIDEBAR) {
+                obj.setDisplaySlot(DisplaySlot.SIDEBAR);
+            }
         }
 
         // Clear previous active entries
@@ -73,14 +62,21 @@ public class StreakScoreboard {
         }
         activeEntries.clear();
 
-        int limit = Math.min(3, sPlayers.size());
+        int limit = Math.min(5, sPlayers.size());
         for (int i = 0; i < limit; i++) {
             PlayerData d = sPlayers.get(i);
             OfflinePlayer op = Bukkit.getOfflinePlayer(d.getUuid());
             String name = op.getName() != null ? op.getName() : "Unknown";
-            String entryText = "#" + (i + 1) + " " + name + ": " + d.getKillStreak() + " kills";
-            obj.getScore(entryText).setScore(3 - i);
-            activeEntries.add(entryText);
+            String entryKey = "§e#" + (i + 1) + " §f" + name + "§7: §6" + d.getKillStreak() + " §7kills";
+            obj.getScore(entryKey).setScore(limit - i);
+            activeEntries.add(entryKey);
+        }
+
+        // Ensure all online players have the main scoreboard attached
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            if (p.getScoreboard() != sb) {
+                p.setScoreboard(sb);
+            }
         }
     }
 }

@@ -17,6 +17,7 @@ public class SpeedReapplyTask extends BukkitRunnable {
 
     @Override
     public void run() {
+        if (plugin.isTournamentMode()) return;
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (plugin.getConfig().getStringList("disabled-worlds").contains(player.getWorld().getName())) {
                 continue;

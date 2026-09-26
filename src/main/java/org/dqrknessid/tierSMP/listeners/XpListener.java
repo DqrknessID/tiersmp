@@ -22,21 +22,25 @@ public class XpListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerExp(PlayerExpChangeEvent event) {
         Player player = event.getPlayer();
-        if (isDisabled(player)) return;
+        if (plugin.isTournamentMode() || isDisabled(player)) return;
 
         Tier tier = plugin.getDataManager().getOrCreate(player.getUniqueId()).getTier();
-        double multiplier = 1.0;
-
-        switch (tier) {
-            case S: multiplier = 1.4; break;
-            case A: multiplier = 1.25; break;
-            case B: multiplier = 1.1; break;
-            default: break;
-        }
+        double multiplier = plugin.getConfig().getDouble("xp-multipliers." + tier.name().toLowerCase(), getDefaultMultiplier(tier));
 
         if (multiplier > 1.0) {
-            int newAmount = (int) Math.round(event.getAmount() * multiplier);
+            int original = event.getAmount();
+            int newAmount = (int) Math.round(original * multiplier);
             event.setAmount(newAmount);
+            plugin.debug("✨ XP Boost: §e" + player.getName() + " §7(" + tier + ") got §b" + newAmount + " XP §7(Original: " + original + " XP, " + multiplier + "x)");
+        }
+    }
+
+    private double getDefaultMultiplier(Tier tier) {
+        switch (tier) {
+            case S: return 2.0;
+            case A: return 1.5;
+            case B: return 1.25;
+            default: return 1.0;
         }
     }
 }

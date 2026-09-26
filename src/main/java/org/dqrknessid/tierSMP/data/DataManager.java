@@ -63,7 +63,8 @@ public class DataManager {
             config.set(key + ".score", data.getScore());
             config.set(key + ".tier", data.getTier().name());
             config.set(key + ".streak", data.getKillStreak());
-            config.set(key + ".einv", data.getEinvContents());
+            List<ItemStack> einv = data.getEinvContents();
+            config.set(key + ".einv", einv != null ? new ArrayList<>(einv) : new ArrayList<>());
         }
         try {
             config.save(file);

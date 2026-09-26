@@ -21,7 +21,7 @@ java {
 
 tasks {
     runServer {
-        minecraftVersion("1.21.4")
+        serverJar(file("purpur-1.21.11.jar"))
         jvmArgs("-Xms2G", "-Xmx2G")
     }
 

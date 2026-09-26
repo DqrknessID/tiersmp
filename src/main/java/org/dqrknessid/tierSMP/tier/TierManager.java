@@ -51,6 +51,32 @@ public class TierManager {
         return true;
     }
 
+    public long getSDemotionRemainingSeconds(UUID uuid) {
+        if (!sDemotionCooldowns.containsKey(uuid)) return 0;
+        long remainingMs = sDemotionCooldowns.get(uuid) - System.currentTimeMillis();
+        if (remainingMs <= 0) {
+            sDemotionCooldowns.remove(uuid);
+            return 0;
+        }
+        return (remainingMs + 999) / 1000L;
+    }
+
+    public Map<UUID, Long> getActiveSDemotionCooldowns() {
+        Map<UUID, Long> active = new HashMap<>();
+        long now = System.currentTimeMillis();
+        Iterator<Map.Entry<UUID, Long>> it = sDemotionCooldowns.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<UUID, Long> entry = it.next();
+            long remaining = entry.getValue() - now;
+            if (remaining > 0) {
+                active.put(entry.getKey(), (remaining + 999) / 1000L);
+            } else {
+                it.remove();
+            }
+        }
+        return active;
+    }
+
     public void startSDemotionCooldown(UUID uuid) {
         long cooldownMs = plugin.getConfig().getInt("s-demotion-cooldown-seconds", 60) * 1000L;
         sDemotionCooldowns.put(uuid, System.currentTimeMillis() + cooldownMs);
@@ -58,6 +84,17 @@ public class TierManager {
 
     public void clearSDemotionCooldown(UUID uuid) {
         sDemotionCooldowns.remove(uuid);
+    }
+
+    public List<PlayerData> getPlayersInTier(Tier tier) {
+        List<PlayerData> list = new ArrayList<>();
+        for (PlayerData d : plugin.getDataManager().getAllData()) {
+            if (d.getTier() == tier) {
+                list.add(d);
+            }
+        }
+        list.sort(Comparator.comparingInt(PlayerData::getScore).reversed());
+        return list;
     }
 
     public boolean hasSlotAvailable(Tier tier) {
@@ -149,8 +186,13 @@ public class TierManager {
 
         data.setTier(newTier);
 
+        String playerName = Bukkit.getOfflinePlayer(data.getUuid()).getName();
+        if (playerName == null) playerName = data.getUuid().toString().substring(0, 8);
+        plugin.debug("🎖 Tier Change: §e" + playerName + " §7moved from §c" + oldTier + " §7to §a" + newTier + " §7(Score: " + data.getScore() + ")");
+
         if (oldTier == Tier.S && newTier != Tier.S) {
             startSDemotionCooldown(data.getUuid());
+            plugin.debug("⏳ S-Demotion Cooldown started for §e" + playerName + " §7(60s)");
         }
 
         if (triggerVisuals) {
@@ -158,6 +200,8 @@ public class TierManager {
             plugin.getBenefitManager().applyBenefits(data.getUuid(), newTier);
             plugin.getExtraInventoryManager().handleTierDowngrade(data.getUuid(), newTier);
         }
+
+        plugin.getStreakScoreboard().update();
 
         // Trigger cascade vacancy check on the tier the player left
         fillVacancies(oldTier, triggerVisuals);

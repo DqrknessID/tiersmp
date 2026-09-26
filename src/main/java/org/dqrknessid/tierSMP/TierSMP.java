@@ -7,6 +7,7 @@ import org.dqrknessid.tierSMP.commands.EinvCommand;
 import org.dqrknessid.tierSMP.commands.EinvseeCommand;
 import org.dqrknessid.tierSMP.commands.TierAdminCommand;
 import org.dqrknessid.tierSMP.commands.TierCommand;
+import org.dqrknessid.tierSMP.commands.TierSMPCommand;
 import org.dqrknessid.tierSMP.commands.TierTopCommand;
 import org.dqrknessid.tierSMP.commands.TierscoreCommand;
 import org.dqrknessid.tierSMP.data.DataManager;
@@ -72,6 +73,12 @@ public class TierSMP extends JavaPlugin {
         getCommand("einvsee").setExecutor(einvseeCmd);
         getCommand("einvsee").setTabCompleter(einvseeCmd);
 
+        TierSMPCommand tiersmpCmd = new TierSMPCommand(this);
+        if (getCommand("tiersmp") != null) {
+            getCommand("tiersmp").setExecutor(tiersmpCmd);
+            getCommand("tiersmp").setTabCompleter(tiersmpCmd);
+        }
+
         // Tasks
         scheduleTasks();
 
@@ -88,6 +95,64 @@ public class TierSMP extends JavaPlugin {
             dataManager.saveAll();
         }
         getServer().getScheduler().cancelTasks(this);
+    }
+
+    private final java.util.Set<java.util.UUID> debugSubscribers = new java.util.HashSet<>();
+    private boolean consoleDebug = true;
+    private boolean tournamentMode = false;
+
+    public boolean isTournamentMode() {
+        return tournamentMode;
+    }
+
+    public void setTournamentMode(boolean tournamentMode) {
+        this.tournamentMode = tournamentMode;
+        // Refresh benefits on all players
+        for (org.bukkit.entity.Player p : Bukkit.getOnlinePlayers()) {
+            if (tournamentMode) {
+                benefitManager.removeBenefits(p);
+                p.closeInventory();
+            } else {
+                benefitManager.applyBenefits(p);
+            }
+        }
+    }
+
+    public boolean toggleTournamentMode() {
+        setTournamentMode(!this.tournamentMode);
+        return this.tournamentMode;
+    }
+
+    public boolean toggleDebugSubscriber(java.util.UUID uuid) {
+        if (debugSubscribers.contains(uuid)) {
+            debugSubscribers.remove(uuid);
+            return false;
+        } else {
+            debugSubscribers.add(uuid);
+            return true;
+        }
+    }
+
+    public boolean isDebugSubscriber(java.util.UUID uuid) {
+        return debugSubscribers.contains(uuid);
+    }
+
+    public boolean toggleConsoleDebug() {
+        this.consoleDebug = !this.consoleDebug;
+        return this.consoleDebug;
+    }
+
+    public void debug(String message) {
+        String formatted = "§8[§bTierSMP-Debug§8] §f" + message;
+        if (consoleDebug) {
+            Bukkit.getConsoleSender().sendMessage(formatted);
+        }
+        for (java.util.UUID uuid : debugSubscribers) {
+            org.bukkit.entity.Player p = Bukkit.getPlayer(uuid);
+            if (p != null && p.isOnline()) {
+                p.sendMessage(formatted);
+            }
+        }
     }
 
     private void scheduleTasks() {
