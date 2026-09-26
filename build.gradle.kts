@@ -21,7 +21,7 @@ java {
 
 tasks {
     runServer {
-        serverJar(file("purpur-1.21.11.jar"))
+        serverJar(file("purpur-26.2.jar"))
         jvmArgs("-Xms2G", "-Xmx2G")
     }
 
