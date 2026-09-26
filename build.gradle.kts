@@ -16,13 +16,18 @@ dependencies {
 }
 
 java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+    toolchain.languageVersion.set(JavaLanguageVersion.of(25))
 }
 
 tasks {
+    withType<JavaCompile> {
+        options.encoding = "UTF-8"
+        options.release.set(21)
+    }
+
     runServer {
         serverJar(file("purpur-26.2.jar"))
-        jvmArgs("-Xms2G", "-Xmx2G")
+        jvmArgs("-Xms2G", "-Xmx2G", "-DPaper.IgnoreJavaVersion=true")
     }
 
     processResources {
