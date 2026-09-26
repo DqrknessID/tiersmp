@@ -23,8 +23,9 @@ public class TierSMPCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 0) {
-            sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize("&6=== &eTierSMP v" + plugin.getDescription().getVersion() + " &6==="));
+            sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize("&6=== &eTierSMP v" + plugin.getPluginMeta().getVersion() + " &6==="));
             sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize("&7- &f/" + label + " debug &7: Toggle live debug messages in your chat."));
+            sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize("&7- &f/" + label + " tournament &7: Toggle fair tournament/event mode."));
             sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize("&7- &f/" + label + " reload &7: Reload plugin configuration."));
             sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize("&7- &f/" + label + " info &7: Show plugin information & stats."));
             return true;
@@ -50,8 +51,8 @@ public class TierSMPCommand implements CommandExecutor, TabCompleter {
             case "info":
             case "version":
                 sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize("&6=== TierSMP Information ==="));
-                sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize("&eVersion: &f" + plugin.getDescription().getVersion()));
-                sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize("&eAuthor: &f" + String.join(", ", plugin.getDescription().getAuthors())));
+                sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize("&eVersion: &f" + plugin.getPluginMeta().getVersion()));
+                sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize("&eAuthor: &f" + String.join(", ", plugin.getPluginMeta().getAuthors())));
                 sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize("&eLoaded Players: &f" + plugin.getDataManager().getAllData().size()));
                 sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize("&eDynamic Scaling: &f" + (plugin.getConfig().getBoolean("dynamic-tier-scaling", true) ? "&aENABLED" : "&cDISABLED")));
                 sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize("&6==========================="));
